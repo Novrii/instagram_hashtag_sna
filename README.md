@@ -1,3 +1,3 @@
 # Instagram Hashtag Data
 
-Unofficial IG hashtag data to Social Network Analysis
+Unofficial Instagram hashtag data to Social Network Analysis
