@@ -1,0 +1,7 @@
+.vscode
+venv
+chromedriver.exe
+hasil
+testing.py
+__pycache__
+secrets.py
