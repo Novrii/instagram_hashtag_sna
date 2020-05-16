@@ -2,12 +2,11 @@ import requests
 import time
 import json
 
-# STEP 1: Scrap posts for a tag
 arr = []
 
-end_cursor = '' # empty for the 1st page
-tag = 'earth' # your tag
-page_count = 3 # desired number of pages
+end_cursor = '' # penanda halaman
+tag = 'earth' # tag yg mau dicari
+page_count = 3 # jumlah halaman
 
 for i in range(0, page_count):
     url = "https://www.instagram.com/explore/tags/{0}/?__a=1&max_id={1}".format(tag, end_cursor)
