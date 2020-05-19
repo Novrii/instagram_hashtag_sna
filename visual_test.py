@@ -1,9 +1,11 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 import json
+import time
 
 G_symmetric = nx.Graph()
 relations = []
+start_time = time.time()
 
 with open('relations.json') as openfile:
     relations = json.load(openfile)
@@ -36,5 +38,7 @@ plt.figure(figsize=(10,10))
 nx.draw_networkx(G_symmetric, pos=pos, with_labels=False,
                 node_color=node_color,
                 node_size=node_size )
+plt.title('Graph #earth', fontsize = 20)
 plt.axis('off')
+print(f"{(time.time() - start_time):.2f} seconds")
 plt.show()
