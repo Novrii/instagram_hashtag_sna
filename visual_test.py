@@ -13,22 +13,6 @@ with open('relations.json') as openfile:
 for edge in relations:
     G_symmetric.add_edge(edge['node1'], edge['node2'])
 
-# G_symmetric.add_edge('Steven',  'Laura')
-# G_symmetric.add_edge('Steven',  'Marc')
-# G_symmetric.add_edge('Steven',  'John')
-# G_symmetric.add_edge('Steven',  'Michelle')
-# G_symmetric.add_edge('Laura',   'Michelle')
-# G_symmetric.add_edge('Michelle','Marc')
-# G_symmetric.add_edge('George',  'John')
-# G_symmetric.add_edge('George',  'Steven')
-
-# print(nx.info(G_symmetric))
-# dc = nx.degree_centrality(G_symmetric)
-# print("DC :",dc)
-
-# plt.figure(figsize=(5,5))
-# nx.draw_networkx(G_symmetric)
-# plt.show()
 
 pos = nx.spring_layout(G_symmetric)
 betCent = nx.betweenness_centrality(G_symmetric, normalized=True, endpoints=True)

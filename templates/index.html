@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="../static/style.css" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <title>Instagram Hashtag | Search</title>
+</head>
+<body>
+    <img src="../static/logo_sna.gif" alt="social network analysis" class="logo" />
+    
+    <div class="container">
+        
+        
+
+        <h1>Social Network Analysis</h1>
+
+        <form action="/buatlatih" method="POST">
+            <div class="form-group">
+                <h3>
+                    Hashtag (#)
+                </h3>
+                <input
+                    type="text"
+                    name="hashtag"
+                    placeholder="Name of Hashtag"
+                />
+            </div>
+            <input type="submit" value="Sumbit" class="btn"  />
+        </form>
+
+        <h1>Riwayat</h1>
+
+        {% if riwayat %}
+            {% for x in riwayat %}
+                <form action="/proses" method="POST">
+                    <div class="form-group">
+                        <button 
+                        type="submit"
+                        name="hashtag"
+                        value="{{ x }}"
+                        class="btn-riwayat">#{{ x }}</button>
+                    </div>
+                </form>
+            {% endfor %}
+        {% endif %}
+    </div>
+</body>
+</html>
