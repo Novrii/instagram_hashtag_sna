@@ -5,47 +5,116 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" href="../static/style.css" />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <title>Instagram Hashtag | Search</title>
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 </head>
 <body>
-    <img src="../static/logo_sna.gif" alt="social network analysis" class="logo" />
     
     <div class="container">
         
-        
 
+        {% if status == 'home' %}
+        <img src="../static/logo_sna.gif" alt="social network analysis" class="logo" />
         <h1>Social Network Analysis</h1>
 
-        <form action="/buatlatih" method="POST">
-            <div class="form-group">
-                <h3>
-                    Hashtag (#)
-                </h3>
-                <input
-                    type="text"
-                    name="hashtag"
-                    placeholder="Name of Hashtag"
-                />
-            </div>
-            <input type="submit" value="Sumbit" class="btn"  />
-        </form>
-
-        <h1>Riwayat</h1>
-
-        {% if riwayat %}
-            {% for x in riwayat %}
-                <form action="/proses" method="POST">
-                    <div class="form-group">
-                        <button 
-                        type="submit"
+            <form action="/proses" method="POST">
+                <div class="form-group">
+                    <h3>
+                        Hashtag (#)
+                    </h3>
+                    <input
+                        type="text"
                         name="hashtag"
-                        value="{{ x }}"
-                        class="btn-riwayat">#{{ x }}</button>
-                    </div>
-                </form>
-            {% endfor %}
+                        placeholder="Name of Hashtag"
+                        class="input"
+                    />
+                </div>
+                <input type="submit" value="Cari" class="btn"  />
+            </form>
+    
+            <h1>Riwayat</h1>
+    
+            {% if riwayat %}
+                {% for x in riwayat %}
+                    <form action="/proses" method="POST">
+                        <div class="form-group">
+                            <button 
+                            type="submit"
+                            name="hashtag"
+                            value="{{ x }}"
+                            class="btn-riwayat">#{{ x }}</button>
+                        </div>
+                    </form>
+                {% endfor %}
+            {% endif %}
+
+        {% elif status == 'proses' %}
+            <a href="/" class="btn"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Kembali</a>
+            <h1>#earth</h1>
+            <p>{{ waktu }} detik</p>
+            
+            <h3 class="message">Degree Centrality</h3>
+            <table id="customers">
+                <tr>
+                    <th>Hashtag</th>
+                    <th>Skor</th>
+                </tr>
+                {% for x in deg_cen %}
+                    <tr>
+                        <td>{{ x[0] }}</td>
+                        <td>{{ x[1] }}</td>
+                    </tr>
+                {% endfor %}
+            
+            </table>
+
+            <h3 class="message">Closeness Centrality</h3>
+            <table id="customers">
+                <tr>
+                    <th>Hashtag</th>
+                    <th>Skor</th>
+                </tr>
+                {% for x in clo_cen %}
+                    <tr>
+                        <td>{{ x[0] }}</td>
+                        <td>{{ x[1] }}</td>
+                    </tr>
+                {% endfor %}
+            
+            </table>
+
+            <h3 class="message">Betweenness Centrality</h3>
+            <table id="customers">
+                <tr>
+                    <th>Hashtag</th>
+                    <th>Skor</th>
+                </tr>
+                {% for x in bet_cen %}
+                    <tr>
+                        <td>{{ x[0] }}</td>
+                        <td>{{ x[1] }}</td>
+                    </tr>
+                {% endfor %}
+            
+            </table>
+
+            <h3 class="message">Eigenvector Centrality</h3>
+            <table id="customers">
+                <tr>
+                    <th>Hashtag</th>
+                    <th>Skor</th>
+                </tr>
+                {% for x in eig_cen %}
+                    <tr>
+                        <td>{{ x[0] }}</td>
+                        <td>{{ x[1] }}</td>
+                    </tr>
+                {% endfor %}
+            
+            </table>
+            
         {% endif %}
+
     </div>
 </body>
 </html>

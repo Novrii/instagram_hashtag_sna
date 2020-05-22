@@ -13,13 +13,14 @@ with open('relations.json') as openfile:
 for edge in relations:
     G_symmetric.add_edge(edge['node1'], edge['node2'])
 
-
+G_symmetric = nx.karate_club_graph()
 pos = nx.spring_layout(G_symmetric)
+# betCent = nx.closeness_centrality(G_symmetric)
 betCent = nx.betweenness_centrality(G_symmetric, normalized=True, endpoints=True)
 node_color = [20000.0 * G_symmetric.degree(v) for v in G_symmetric]
 node_size =  [v * 10000 for v in betCent.values()]
 plt.figure(figsize=(10,10))
-nx.draw_networkx(G_symmetric, pos=pos, with_labels=False,
+nx.draw_networkx(G_symmetric, pos=pos, with_labels=True,
                 node_color=node_color,
                 node_size=node_size )
 plt.title('Graph #earth', fontsize = 20)
