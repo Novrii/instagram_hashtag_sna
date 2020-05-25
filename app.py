@@ -119,10 +119,15 @@ def proses():
             else:
                 with open(dir_riwayat+"/eig_cen.json") as openfile:
                     eig_cen = json.load(openfile)
+            
+            # Open Add html graph
+            deg_cen_html = []
+            with open(dir_riwayat+"/earth_html.json") as openfile:
+                deg_cen_html = json.load(openfile)
 
             waktu = (time.time() - start_time)
 
-            return render_template('index.html', status='proses', bet_cen=bet_cen, deg_cen=deg_cen, clo_cen=clo_cen, eig_cen=eig_cen, waktu=f'{waktu:.2f}')
+            return render_template('index.html', status='proses', bet_cen=bet_cen, deg_cen=deg_cen, clo_cen=clo_cen, eig_cen=eig_cen, deg_cen_html=deg_cen_html, waktu=f'{waktu:.2f}')
         
         else: # jika data belum tersedia, maka grab postingan
             return render_template('index.html', status='proses')
