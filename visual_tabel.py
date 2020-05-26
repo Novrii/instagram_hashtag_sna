@@ -29,29 +29,19 @@ with open('relations.json') as openfile:
 for edge in relations:
     G_symmetric.add_edge(edge['node1'], edge['node2'])
 
-# Betweenness centrality
-bet_cen = nx.betweenness_centrality(G_symmetric)
-bet_cen = sort_and_small_dict(bet_cen, 5)
+bc = []
+with open('bet_cen.json') as openfile:
+    bc = json.load(openfile)
 
-# print(bet_cen)
+count = G_symmetric[bc[1][0]]
 
-with open('bet_cen.json', 'w') as outfile:
-    json.dump(bet_cen, outfile)
+print(len(count))
 
-# Table summarising results
-# fig, ax = plt.subplots()
-# fig.patch.set_visible(False)
-# ax.axis('off')
-# ax.axis('tight')
-# data = [centrality_to_str_arr(bet_cen)]
-# data = np.transpose(data)
-# table = ax.table(colLabels=['Betweenness Centrality'],
-#                 cellText=data,
-#                 loc='center')
-# for (row, col), cell in table.get_celld().items():
-#     if (row == 0) or (col == -1):
-#         cell.set_text_props(fontproperties=FontProperties(weight='bold'))
-# fig.tight_layout()
-# plt.savefig("./bet-cen.png", dpi=300)
-# print(f"{(time.time() - start_time):.2f} seconds")
-# plt.show()
+# # Betweenness centrality
+# bet_cen = nx.betweenness_centrality(G_symmetric)
+# bet_cen = sort_and_small_dict(bet_cen, 5)
+
+# # print(bet_cen)
+
+# with open('bet_cen.json', 'w') as outfile:
+#     json.dump(bet_cen, outfile)

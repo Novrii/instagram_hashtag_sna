@@ -17,7 +17,7 @@ for item in arr:
             tag_cek = tag.strip("#").split("#")
             if len(tag_cek) > 0: # cek jika hashtag tidak pakai spasi
                 for tag_tag in tag_cek:
-                    # menghilangkan tag, emoji dan bahasa selain latin
+                    # menghilangkan tag, emoji dan bahasa selain latin (HANYA BAHASA LATIN)
                     save_tag = (tag_tag.strip("#").encode('ascii', 'ignore')).decode('utf-8')
                     if len(save_tag) is not 0:
                         hashtags.append(save_tag)

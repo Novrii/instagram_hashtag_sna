@@ -6,6 +6,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import collections
 import seaborn as sns
+import requests
 
 from bokeh.io import output_file, show
 from bokeh.models import HoverTool, ColumnDataSource, LinearColorMapper, BoxSelectTool, Circle,  MultiLine, NodesAndLinkedEdges, Plot, Range1d, TapTool, BoxZoomTool, ResetTool, WheelZoomTool, PanTool
@@ -26,12 +27,6 @@ def sort_and_small_dict(d, n):
     firstnpairs = list(sorted_dict.items())[:n]
     return firstnpairs
 
-def centrality_to_str_arr(centrality):
-    str_arr = []
-    for item in centrality:
-        str_arr.append(item[0] + ' | ' + str(round(item[1], 2)))
-    return str_arr
-
 # route Index
 @app.route('/')
 def index():
@@ -49,13 +44,117 @@ def proses():
     if request.method == 'POST':
         riwayat = request.form['hashtag']
         dir_riwayat = os.path.join(BASEDIR, "data/"+riwayat)
+        start_time = time.time()
         
         if not os.path.exists(dir_riwayat): # jika data belum tersedia, maka grab postingan, caption, hashtag dan relation
-            return jsonify("Info - Data Belum Tersedia")
+            os.mkdir(dir_riwayat) # create dir riwayat
+            # Grab Posts
+            arr = []
+            
+            end_cursor = '' # penanda halaman
+            tag = riwayat # tag yg mau dicari
+            page_count = 7 # jumlah halaman
+
+            try:
+                for i in range(0, page_count):
+                    url = "https://www.instagram.com/explore/tags/{0}/?__a=1&max_id={1}".format(tag, end_cursor)
+                    r = requests.get(url)
+                    data = json.loads(r.text)
+                    
+                    end_cursor = data['graphql']['hashtag']['edge_hashtag_to_media']['page_info']['end_cursor'] # value for the next page
+                    edges = data['graphql']['hashtag']['edge_hashtag_to_media']['edges'] # list with posts
+                    
+                    for item in edges:
+                        arr.append(item['node'])
+                        print(item['node'])
+
+                    time.sleep(2) # insurence to not reach a time limit
+            except:
+                return jsonify("Error - Grap Posts")
+                
+            print("End cursor:",end_cursor) # save this to restart parsing with the next page
+
+            with open(dir_riwayat+'/posts.json', 'w') as outfile:
+                json.dump(arr, outfile) # save to json
+            
+            # Grab captions
+            captions = []
+            for item in arr:
+                shortcode = item['shortcode']
+
+                caption = item['edge_media_to_caption']['edges']
+                # print(len(caption))
+                try:
+                    if len(caption) != 0:
+                        text = item['edge_media_to_caption']['edges'][0]['node']['text']
+                        # print(text)
+                        captions.append({
+                            'shortcode' : shortcode,
+                            'caption' : text
+                        })
+                except:
+                    print(len(caption))
+                
+            with open(dir_riwayat+'/captions.json', 'w', encoding='utf-8') as outfile:
+                json.dump(captions, outfile, ensure_ascii=False) # save to json
+            
+            # Grab Hashtag
+            hashtag = []
+
+            for item in captions:
+                shortcode = item['shortcode']
+                caption = item['caption']
+                hashtags = []
+                
+                for tag in caption.split():
+                    if tag.startswith("#"):
+                        tag_cek = tag.strip("#").split("#")
+                        if len(tag_cek) > 0: # cek jika hashtag tidak pakai spasi
+                            for tag_tag in tag_cek:
+                                # menghilangkan tag, emoji dan bahasa selain latin (HANYA BAHASA LATIN)
+                                save_tag = (tag_tag.strip("#").encode('ascii', 'ignore')).decode('utf-8')
+                                if len(save_tag) is not 0:
+                                    hashtags.append(save_tag)
+                        else:
+                            save_tag = (tag.strip("#").encode('ascii', 'ignore')).decode('utf-8')
+                            if len(save_tag) is not 0:
+                                hashtags.append(save_tag)
+                
+                # hashtags = [tag.strip("#") for tag in caption.split() if tag.startswith("#")]
+                hashtag.append({
+                    'shortcode' : shortcode,
+                    'hashtag' :  hashtags
+                })
+
+            with open(dir_riwayat+'/hashtags.json', 'w') as outfile: # encoding utf-8 utk izin simpan karakter selain latin
+                json.dump(hashtag, outfile)
+            
+            # Grab Relations
+            relations = []
+
+            count = 0
+            for idx_arr, post in enumerate(hashtag):
+                tags = post['hashtag']
+                if len(tags) is not 0:
+                    for idx_tag, tag in enumerate(tags):
+                        for jdx_tag, jtag in enumerate(tags):
+                            batas = jdx_tag + 1
+                            if batas <= len(tags)-1: # looping sampai akhir, tapi tidak lewat batas
+                                i = tags[idx_tag]
+                                j = tags[jdx_tag+1]
+                                relations.append({
+                                    "node1" : i,
+                                    "node2" : j
+                                })
+
+            with open(dir_riwayat+'/relations.json', 'w') as outfile:
+                json.dump(relations, outfile)
+
+            waktu = (time.time() - start_time) # Hitung waktu proses
+            return jsonify(f"Info - Data Tersedia - {waktu:.2f}")
 
         dir_relation = os.path.join(dir_riwayat, "relations.json")
 
-        start_time = time.time()
         bet_cen = []
         bet_cen_html = []
         deg_cen = []
@@ -82,6 +181,7 @@ def proses():
             node_size = {k:100*v for k, v in bet_cen.items()}
             node_color = {k:15*v for k, v in bet_cen.items()}
 
+            # bet_cen_sort = sort_and_small_dict(bet_cen, 5)
             for i in bet_cen.items():
                 if i[1] < 0.01: # menghapus node yg skornya kurang dari 0.1
                     G_symmetric.remove_node(i[0])
@@ -219,8 +319,9 @@ def proses():
             node_size = {k:100*v for k, v in clo_cen.items()}
             node_color = {k:15*v for k, v in clo_cen.items()}
 
+            clo_cen_sort = sort_and_small_dict(clo_cen, 5)
             for i in clo_cen.items():
-                if i[1] < 0.55: # menghapus node yg skornya kurang dari 0.1
+                if i[1] < clo_cen_sort[4][1]: # menghapus node yg skornya kurang dari 0.1
                     G_symmetric.remove_node(i[0])
 
             # Set node attribute
