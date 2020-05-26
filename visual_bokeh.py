@@ -39,7 +39,7 @@ node_size = {k:100*v for k, v in dc.items()}
 node_color = {k:15*v for k, v in dc.items()}
 
 for i in dc.items():
-    if i[1] < 0.1:
+    if i[1] < 0.1: # menghapus node yg skornya kurang dari 0.1
         print(i[0])
         G.remove_node(i[0])
 

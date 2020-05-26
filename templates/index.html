@@ -57,9 +57,8 @@
             <h1>#earth</h1>
             <p>{{ waktu }} detik</p>
 
-            {{ deg_cen_html[0]['div'] }}
             <h3 class="message">Degree Centrality</h3>
-            
+            {{ deg_cen_html[0]['div'] | safe }}
             <table id="customers">
                 <tr>
                     <th>Hashtag</th>
@@ -75,6 +74,7 @@
             </table>
 
             <h3 class="message">Closeness Centrality</h3>
+            {{ clo_cen_html[0]['div'] | safe }}
             <table id="customers">
                 <tr>
                     <th>Hashtag</th>
@@ -90,6 +90,7 @@
             </table>
 
             <h3 class="message">Betweenness Centrality</h3>
+            {{ bet_cen_html[0]['div'] | safe }}
             <table id="customers">
                 <tr>
                     <th>Hashtag</th>
@@ -105,6 +106,7 @@
             </table>
 
             <h3 class="message">Eigenvector Centrality</h3>
+            {{ eig_cen_html[0]['div'] | safe }}
             <table id="customers">
                 <tr>
                     <th>Hashtag</th>
@@ -124,45 +126,16 @@
     </div>
 
     {% if deg_cen_html %}
-        <script type="application/json" id="1302">
-        {"ae217c56-34b7-43d7-81dd-f0993036096b":{"roots":{"references":[{"attributes":{"end":1.1,"start":-1.1},"id":"1003","type":"Range1d"},{"attributes":{},"id":"1069","type":"Selection"},{"attributes":{},"id":"1013","type":"WheelZoomTool"},{"attributes":{},"id":"1071","type":"Selection"},{"attributes":{"end":1.1,"start":-1.1},"id":"1002","type":"Range1d"},{"attributes":{},"id":"1070","type":"UnionRenderers"},{"attributes":{},"id":"1014","type":"PanTool"},{"attributes":{"edge_renderer":{"id":"1029"},"inspection_policy":{"id":"1058"},"layout_provider":{"id":"1031"},"node_renderer":{"id":"1025"},"selection_policy":{"id":"1052"}},"id":"1022","type":"GraphRenderer"},{"attributes":{"active_drag":"auto","active_inspect":"auto","active_multi":null,"active_scroll":"auto","active_tap":"auto","tools":[{"id":"1008"},{"id":"1009"},{"id":"1010"},{"id":"1011"},{"id":"1012"},{"id":"1013"},{"id":"1014"}]},"id":"1015","type":"Toolbar"},{"attributes":{},"id":"1052","type":"NodesAndLinkedEdges"},{"attributes":{"line_color":{"value":"#fdae61"}},"id":"1042","type":"MultiLine"},{"attributes":{"data":{"index":["earth","instagood","art","nature","love","beautiful","travel","landscape","naturephotography","naturelovers","photography","photooftheday","world","sky","instagram","planetearth","wildlife","picoftheday","life","travelphotography"],"node_color":[14.110644257703083,2.100840336134454,3.277310924369748,7.359943977591037,3.186274509803922,2.2408963585434174,3.3753501400560224,2.9201680672268906,2.9271708683473388,2.0028011204481793,3.6904761904761907,3.074229691876751,3.0252100840336134,1.638655462184874,2.065826330532213,1.6246498599439776,1.5546218487394958,1.792717086834734,1.5756302521008403,1.5126050420168067],"node_size":[94.07096171802056,14.005602240896359,21.84873949579832,49.066293183940246,21.24183006535948,14.939309056956116,22.50233426704015,19.46778711484594,19.514472455648928,13.352007469654529,24.603174603174605,20.494864612511673,20.168067226890756,10.92436974789916,13.77217553688142,10.830999066293185,10.364145658263306,11.951447245564893,10.504201680672269,10.084033613445378]},"selected":{"id":"1071"},"selection_policy":{"id":"1072"}},"id":"1024","type":"ColumnDataSource"},{"attributes":{},"id":"1054","type":"LinearScale"},{"attributes":{"data_source":{"id":"1024"},"glyph":{"id":"1032"},"hover_glyph":null,"muted_glyph":null,"view":{"id":"1026"}},"id":"1025","type":"GlyphRenderer"},{"attributes":{"source":{"id":"1024"}},"id":"1026","type":"CDSView"},{"attributes":{"line_color":{"value":"#abdda4"}},"id":"1047","type":"MultiLine"},{"attributes":{},"id":"1055","type":"LinearScale"},{"attributes":{"data":{"end":["earth","instagood","art","nature","love","beautiful","travel","landscape","naturephotography","naturelovers","photography","photooftheday","world","sky","instagram","planetearth","wildlife","picoftheday","life","travelphotography","instagood","art","nature","love","beautiful","travel","naturelovers","naturephotography","instagram","photooftheday","world","photography","landscape","travelphotography","life","picoftheday","sky","wildlife","planetearth","art","nature","love","beautiful","travel","life","world","photography","landscape","instagram","naturephotography","photooftheday","travelphotography","sky","picoftheday","wildlife","naturelovers","nature","love","beautiful","travel","landscape","naturephotography","naturelovers","photography","photooftheday","instagram","sky","planetearth","wildlife","picoftheday","world","travelphotography","life","love","beautiful","naturephotography","naturelovers","photography","photooftheday","travel","life","instagram","travelphotography","sky","landscape","world","picoftheday","wildlife","planetearth","beautiful","naturephotography","naturelovers","photography","photooftheday","landscape","world","travel","instagram","picoftheday","travelphotography","sky","planetearth","life","travel","landscape","planetearth","naturelovers","naturephotography","wildlife","photography","picoftheday","world","travelphotography","instagram","photooftheday","sky","life","landscape","world","photography","wildlife","naturephotography","photooftheday","instagram","picoftheday","naturelovers","travelphotography","sky","planetearth","life","naturephotography","naturelovers","photography","photooftheday","instagram","sky","planetearth","wildlife","picoftheday","world","travelphotography","life","naturelovers","photography","photooftheday","world","sky","instagram","planetearth","wildlife","picoftheday","travelphotography","life","photography","photooftheday","planetearth","wildlife","picoftheday","world","travelphotography","instagram","sky","life","photooftheday","instagram","wildlife","travelphotography","sky","world","life","picoftheday","planetearth","world","sky","wildlife","instagram","picoftheday","planetearth","life","travelphotography","sky","instagram","travelphotography","planetearth","picoftheday","instagram","life","travelphotography","picoftheday","planetearth","planetearth","wildlife","picoftheday","life","wildlife","picoftheday","picoftheday","travelphotography","life","life","travelphotography","travelphotography"],"start":["earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","earth","instagood","instagood","instagood","instagood","instagood","instagood","instagood","instagood","instagood","instagood","instagood","instagood","instagood","instagood","instagood","instagood","instagood","instagood","instagood","art","art","art","art","art","art","art","art","art","art","art","art","art","art","art","art","art","nature","nature","nature","nature","nature","nature","nature","nature","nature","nature","nature","nature","nature","nature","nature","nature","nature","love","love","love","love","love","love","love","love","love","love","love","love","love","love","love","love","beautiful","beautiful","beautiful","beautiful","beautiful","beautiful","beautiful","beautiful","beautiful","beautiful","beautiful","beautiful","beautiful","beautiful","travel","travel","travel","travel","travel","travel","travel","travel","travel","travel","travel","travel","travel","travel","landscape","landscape","landscape","landscape","landscape","landscape","landscape","landscape","landscape","landscape","landscape","landscape","landscape","naturephotography","naturephotography","naturephotography","naturephotography","naturephotography","naturephotography","naturephotography","naturephotography","naturephotography","naturephotography","naturephotography","naturephotography","naturelovers","naturelovers","naturelovers","naturelovers","naturelovers","naturelovers","naturelovers","naturelovers","naturelovers","naturelovers","naturelovers","photography","photography","photography","photography","photography","photography","photography","photography","photography","photography","photooftheday","photooftheday","photooftheday","photooftheday","photooftheday","photooftheday","photooftheday","photooftheday","photooftheday","world","world","world","world","world","world","world","world","sky","sky","sky","sky","sky","instagram","instagram","instagram","instagram","instagram","planetearth","planetearth","planetearth","planetearth","wildlife","wildlife","picoftheday","picoftheday","picoftheday","life","life","travelphotography"]},"selected":{"id":"1069"},"selection_policy":{"id":"1070"}},"id":"1028","type":"ColumnDataSource"},{"attributes":{},"id":"1058","type":"NodesOnly"},{"attributes":{"data_source":{"id":"1028"},"glyph":{"id":"1037"},"hover_glyph":{"id":"1047"},"muted_glyph":null,"selection_glyph":{"id":"1042"},"view":{"id":"1030"}},"id":"1029","type":"GlyphRenderer"},{"attributes":{"bottom_units":"screen","fill_alpha":0.5,"fill_color":"lightgrey","left_units":"screen","level":"overlay","line_alpha":1.0,"line_color":"black","line_dash":[4,4],"line_width":2,"render_mode":"css","right_units":"screen","top_units":"screen"},"id":"1067","type":"BoxAnnotation"},{"attributes":{"bottom_units":"screen","fill_alpha":0.5,"fill_color":"lightgrey","left_units":"screen","level":"overlay","line_alpha":1.0,"line_color":"black","line_dash":[4,4],"line_width":2,"render_mode":"css","right_units":"screen","top_units":"screen"},"id":"1068","type":"BoxAnnotation"},{"attributes":{"source":{"id":"1028"}},"id":"1030","type":"CDSView"},{"attributes":{"renderers":[{"id":"1022"}],"title":{"id":"1007"},"toolbar":{"id":"1015"},"x_range":{"id":"1002"},"x_scale":{"id":"1054"},"y_range":{"id":"1003"},"y_scale":{"id":"1055"}},"id":"1004","type":"Plot"},{"attributes":{"graph_layout":{"art":[-0.595766582503203,0.3664706239551311],"beautiful":[0.6789026644927607,0.22584806832769666],"earth":[0.19444616226726108,-0.689585936362062],"instagood":[-0.43392158655841684,-0.4643139879467422],"instagram":[0.08906533249444451,0.586890672814224],"landscape":[-0.34671429114582814,-0.12297930323738751],"life":[-0.12128742069446577,0.8462281538042686],"love":[-0.10005585081684383,-0.5711673568082378],"nature":[-0.6765894616586816,0.07422210730656323],"naturelovers":[0.7449899455350668,-0.18393500625436351],"naturephotography":[0.5045822400084471,-0.5520304716775358],"photography":[-0.14852465512481305,0.20354907244979106],"photooftheday":[0.26251334966543344,0.15907812097123222],"picoftheday":[-0.40887422517426625,0.5872734819983754],"planetearth":[-0.7992999361244878,-0.2864748392849261],"sky":[0.3949248001900053,0.6970348246768681],"travel":[0.06520566946877536,-0.2191781122672031],"travelphotography":[0.7530943577736451,0.5622448353869942],"wildlife":[-0.5027919324692552,-1.0],"world":[0.44610142037441763,-0.21917494785268501]}},"id":"1031","type":"StaticLayoutProvider"},{"attributes":{"text":"Graph Interaction Demonstration"},"id":"1007","type":"Title"},{"attributes":{"fill_color":{"field":"node_color","transform":{"id":"1001"}},"size":{"field":"node_size","units":"screen"}},"id":"1032","type":"Circle"},{"attributes":{"callback":null,"tooltips":[["index","@index"]]},"id":"1008","type":"HoverTool"},{"attributes":{"line_alpha":{"value":0.8},"line_color":{"value":"#CCCCCC"}},"id":"1037","type":"MultiLine"},{"attributes":{},"id":"1072","type":"UnionRenderers"},{"attributes":{"callback":null},"id":"1009","type":"TapTool"},{"attributes":{"overlay":{"id":"1067"}},"id":"1010","type":"BoxSelectTool"},{"attributes":{"high":21,"low":0,"palette":["#edd1cb","#e9c6c2","#e5baba","#e0afb3","#daa4ac","#d499a7","#cd8ea1","#c5849d","#bd7a98","#b37093","#aa688f","#9f5f8a","#945785","#884f7f","#7b4779","#6e4071","#613969","#533260","#462b55","#39254a","#2d1e3e"]},"id":"1001","type":"LinearColorMapper"},{"attributes":{},"id":"1011","type":"ResetTool"},{"attributes":{"overlay":{"id":"1068"}},"id":"1012","type":"BoxZoomTool"}],"root_ids":["1004"]},"title":"Bokeh Application","version":"2.0.2"}}
-        </script>
-        <script type="text/javascript">
-        (function() {
-            var fn = function() {
-            Bokeh.safely(function() {
-                (function(root) {
-                function embed_document(root) {
-                    
-                var docs_json = document.getElementById('1302').textContent;
-                var render_items = [{"docid":"ae217c56-34b7-43d7-81dd-f0993036096b","root_ids":["1004"],"roots":{"1004":"f6af562c-16ee-4874-ac73-6094d865a533"}}];
-                root.Bokeh.embed.embed_items(docs_json, render_items);
-                
-                }
-                if (root.Bokeh !== undefined) {
-                    embed_document(root);
-                } else {
-                    var attempts = 0;
-                    var timer = setInterval(function(root) {
-                    if (root.Bokeh !== undefined) {
-                        clearInterval(timer);
-                        embed_document(root);
-                    } else {
-                        attempts++;
-                        if (attempts > 100) {
-                        clearInterval(timer);
-                        console.log("Bokeh: ERROR: Unable to run BokehJS code because BokehJS library is missing");
-                        }
-                    }
-                    }, 10, root)
-                }
-                })(window);
-            });
-            };
-            if (document.readyState != "loading") fn();
-            else document.addEventListener("DOMContentLoaded", fn);
-        })();
-        </script>
+        {{ deg_cen_html[0]['script'] | safe }}
+    {% endif %}
+    {% if clo_cen_html %}
+        {{ clo_cen_html[0]['script'] | safe }}
+    {% endif %}
+    {% if bet_cen_html %}
+        {{ bet_cen_html[0]['script'] | safe }}
+    {% endif %}
+    {% if eig_cen_html %}
+        {{ eig_cen_html[0]['script'] | safe }}
     {% endif %}
 </body>
 </html>
