@@ -2,6 +2,7 @@
 # https://stackoverflow.com/questions/46397671/using-bokeh-how-does-one-plot-variable-size-nodes-and-node-colors
 import networkx as nx
 import seaborn as sns
+import collections
 
 from bokeh.io import output_file, show
 from bokeh.models import HoverTool, ColumnDataSource, LinearColorMapper, BoxSelectTool, Circle,  MultiLine, NodesAndLinkedEdges, Plot, Range1d, TapTool, BoxZoomTool, ResetTool, WheelZoomTool, PanTool
@@ -11,8 +12,14 @@ from bokeh.embed import components
 
 import json
 
+def sort_and_small_dict(d, n):
+    sorted_dict = collections.OrderedDict(sorted(d.degree(), key=lambda x: -x[1]))
+    firstnpairs = list(sorted_dict.degree())[:n]
+    return firstnpairs
+
 # Prepare Data
 G = nx.Graph()
+G_temp = nx.Graph()
 
 # Data testing
 # G.add_edge('Steven',  'Laura')
@@ -30,20 +37,35 @@ with open('relations.json') as openfile:
     relations = json.load(openfile) # load json relasi hashtag
 for edge in relations:
     G.add_edge(edge['node1'], edge['node2']) # add edge dari data json
+    G_temp.add_edge(edge['node1'], edge['node2']) # add edge dari data json
 
-# Centrality
-dc = nx.degree_centrality(G)
+# # Centrality
+# dc = nx.degree_centrality(G)
 
-# Set node size and color
-node_size = {k:100*v for k, v in dc.items()}
-node_color = {k:15*v for k, v in dc.items()}
+# # Set node size and color for dc
+# node_size = {k:100*v for k, v in dc.items()}
+# node_color = {k:15*v for k, v in dc.items()}
 
-for i in dc.items():
-    if i[1] < 0.1: # menghapus node yg skornya kurang dari 0.1
-        print(i[0])
+
+# print(len(node_size))
+
+for i in G_temp.degree():
+    # print(i[0])
+    if i[1] < 100: # menghapus node yg skornya kurang dari 10
+        # print(i[0],i[1])
         G.remove_node(i[0])
+    # else:
+    #     print(i[0],i[1])
 
-# print(G['Steven'])
+# print(len(G['withgalaxy']))
+# for k, v in G.degree():
+#     print(k,v)
+
+# Set node size and color for G
+node_size = {k:v/5 for k, v in G.degree()}
+node_color = {k:v/5 for k, v in G.degree()}
+
+# print(node_size)
 
 # Set node attribute
 nx.set_node_attributes(G, node_color, 'node_color')
@@ -76,15 +98,15 @@ plot.renderers.append(graph)
 
 show(plot)
 
-# Save div and script
-script, div = components(plot)
-# print(div)
-# print(script)
-visual_html = []
-visual_html.append({
-    'div' : div,
-    'script' : script
-})
-with open('earth_html.json', 'w') as outfile:
-    json.dump(visual_html, outfile) # save html part
-    print("Saved")
+# # Save div and script
+# script, div = components(plot)
+# # print(div)
+# # print(script)
+# visual_html = []
+# visual_html.append({
+#     'div' : div,
+#     'script' : script
+# })
+# with open('earth_html.json', 'w') as outfile:
+#     json.dump(visual_html, outfile) # save html part
+#     print("Saved")

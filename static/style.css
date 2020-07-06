@@ -12,7 +12,7 @@ body {
 }
 
 .container {
-	max-width: 650px;
+	max-width: 750px;
 	margin: 1rem auto;
 	overflow: auto;
 	padding: 0 2rem;
@@ -54,8 +54,39 @@ a {
 	margin: 1rem 0;
 }
 
+/* Style tab links */
+.tablink {
+    background-color: rgb(15, 185, 129);
+    color: white;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    font-size: 17px;
+    width: 50% ;
+}
+
+.tablink:hover {
+    background-color: rgb(18, 212, 148);
+}
+
+/* Style the tab content (and add height:100% for full page content) */
+.tabcontent {
+    color: #333;
+    display: none;
+    padding: 10px 10px;
+	height: 100%;
+	overflow: auto;
+}
+
+#Home {background-color: #fff;}
+#News {background-color: #fff;}
+#About {background-color: #fff;}
+
 
 input[type='text'],
+input[type='password'],
 select,
 textarea {
 	display: block;
@@ -65,7 +96,7 @@ textarea {
 	border: 1px solid #ccc;
 }
 
-.btn {
+.btn-standar {
 	display: block;
 	width: 100%;
 	background: #333;
@@ -99,8 +130,8 @@ textarea {
 }
 
 #customers td, #customers th {
-border: 1px solid #ddd;
-padding: 8px;
+	border: 1px solid #ddd;
+	padding: 8px;
 }
 
 #customers tr:nth-child(even){background-color: #f2f2f2;}
@@ -108,9 +139,12 @@ padding: 8px;
 #customers tr:hover {background-color: #ddd;}
 
 #customers th {
-padding-top: 12px;
-padding-bottom: 12px;
-text-align: left;
-background-color: #333;
-color: white;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: left;
+	background-color: #333;
+	color: white;
 }
+
+table tr { display: none; }
+table tr.active { display: table-row; }

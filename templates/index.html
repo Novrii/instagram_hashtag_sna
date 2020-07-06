@@ -8,20 +8,22 @@
     <title>Instagram Hashtag | Search</title>
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-2.0.2.min.js" integrity="sha384-ufR9RFnRs6lniiaFvtJziE0YeidtAgBRH6ux2oUItHw5WTvE1zuk9uzhUU/FJXDp" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript">
         Bokeh.set_log_level("info");
     </script>
 </head>
 <body>
     
+    <a href="/logout" class="btn-standar" style="width: fit-content; position: fixed; right: 0;"> <i class="fa fa-sign-out"></i></a>
     <div class="container">
-        
+
 
         {% if status == 'home' %}
         <img src="../static/logo_sna.gif" alt="social network analysis" class="logo" />
         <h1>Social Network Analysis</h1>
 
-            <form action="/proses" method="POST">
+            <form action="/cari" method="POST">
                 <div class="form-group">
                     <h3>
                         Hashtag (#)
@@ -33,14 +35,14 @@
                         class="input"
                     />
                 </div>
-                <input type="submit" value="Cari" class="btn"  />
+                <input type="submit" value="Cari" class="btn-standar"  />
             </form>
     
             <h1>Riwayat</h1>
     
             {% if riwayat %}
                 {% for x in riwayat %}
-                    <form action="/proses" method="POST">
+                    <form action="/cari" method="POST">
                         <div class="form-group">
                             <button 
                             type="submit"
@@ -52,12 +54,92 @@
                 {% endfor %}
             {% endif %}
 
-        {% elif status == 'proses' %}
-            <a href="/" class="btn"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Kembali</a>
-            <h1>#earth</h1>
-            <p>{{ waktu }} detik</p>
 
-            <h3 class="message">Degree Centrality</h3>
+        {% elif status == 'proses' %}
+
+            <a href="/cari" class="btn-standar" style="text-decoration: none;"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Kembali</a>
+            
+            <p>{{ raw_data|length }} posts | {{ n_nodes }} nodes | {{ n_edges }} edges | {{menit}} menit {{ detik }} detik</p>
+            {% set item1, item2 = tag.split('_') %}
+            <h1 style="float: left;">#{{ item1 }} - {{ item2 }}</h1>
+            <form action="/proses" method="POST">
+                <div class="form-group" style="width: fit-content; float: right;">
+                    <button 
+                    type="submit"
+                    name="hashtag"
+                    value="{{ item1 }}"
+                    class="btn-riwayat"
+                    style="margin-top: 0;"><i class="fa fa-refresh"></i> update</button>
+                </div>
+            </form>
+
+            <div style="content: none; clear: both;"></div>
+
+            <button class="tablink" onclick="openPage('Home', this, 'rgb(10, 128, 88)')" id="defaultOpen">Data Hashtag</button>
+            <button class="tablink" onclick="openPage('News', this, 'rgb(10, 128, 88)')" >Centrality</button>
+
+            <div id="Home" class="tabcontent">
+                <h3>Raw Data</h3>
+                <table id="customers" class="more_load1">
+                    <tr>
+                        <th>No</th>
+                        <th>Hashtags</th>
+                        <th>Foto</th>
+                    </tr>
+                    {% for x in range(500) %}
+                        <tr>
+                            <td>{{ x + 1 }}</td>
+                            <td>
+                                {% for y in range(raw_data[x]['hashtag']|length) %}
+                                    #{{ raw_data[x]['hashtag'][y] | safe }}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                <a target="_blank" href="{{ raw_data[x]['display'] }}">
+                                    <img src="{{ raw_data[x]['display'] }}" alt="Cinque Terre" width="400" height="140">
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+                <a href="#" id="load_more1" class="btn-standar">Load more</a>
+                
+            </div>
+            
+            <div id="News" class="tabcontent">
+                <h1>
+                    Hasil
+                </h1>
+
+                <div style="margin: 0 auto; width: fit-content;">
+                    {{ tag_html[0]['div'] | safe }}
+                </div>
+
+                <table id="customers" class="more_load">
+                    <tr>
+                        <th>No</th>
+                        <th>Degree Centrality</th>
+                        <th>Closeness Centrality</th>
+                        <th>Betweenness Centrality</th>
+                        <th>Eigenvector Centrality</th>
+                    </tr>
+                    {% for x in range(100) %}
+                        <tr>
+                            <td>{{ x + 1 }}</td>
+                            <td>{{ deg_cen[x] | safe }}</td>
+                            <td>{{ clo_cen[x] | safe }}</td>
+                            <td>{{ bet_cen[x] | safe }}</td>
+                            <td>{{ eig_cen[x] | safe }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                
+                <a href="#" id="load_more" class="btn-standar">Load more</a>
+            </div>
+
+            
+            <!-- <h3 class="message">Degree Centrality</h3>
             {{ deg_cen_html[0]['div'] | safe }}
             <table id="customers">
                 <tr>
@@ -82,8 +164,7 @@
                 </tr>
                 {% for x in clo_cen %}
                     <tr>
-                        <td>{{ x[0] }}</td>
-                        <td>{{ x[1] }}</td>
+                        <td>{{ x }}</td>
                     </tr>
                 {% endfor %}
             
@@ -119,13 +200,53 @@
                     </tr>
                 {% endfor %}
             
-            </table>
+            </table> -->
             
         {% endif %}
 
     </div>
 
-    {% if deg_cen_html %}
+    <script>
+        $('table.more_load tr:lt(31)').addClass('active'); // tabel hasil
+        $('table.more_load1 tr:lt(101)').addClass('active'); // tabel raw data
+
+        $('a#load_more').on('click', function(e) {
+            e.preventDefault();  
+            var $rows = $('table.more_load tr');
+            var lastActiveIndex = $rows.filter('.active:last').index();
+            $rows.filter(':lt(' + (lastActiveIndex + 10) + ')').addClass('active');
+        });
+        $('a#load_more1').on('click', function(e) {
+            e.preventDefault();  
+            var $rows = $('table.more_load1 tr');
+            var lastActiveIndex = $rows.filter('.active:last').index();
+            $rows.filter(':lt(' + (lastActiveIndex + 100) + ')').addClass('active');
+        });
+    </script>
+
+    <script>
+        function openPage(pageName,elmnt,color) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].style.backgroundColor = "";
+            }
+            document.getElementById(pageName).style.display = "block";
+            elmnt.style.backgroundColor = color;
+        }
+
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
+    </script>
+
+    {% if tag_html %}
+        {{ tag_html[0]['script'] | safe }}
+    {% endif %}
+    <!-- {% if deg_cen_html %}
         {{ deg_cen_html[0]['script'] | safe }}
     {% endif %}
     {% if clo_cen_html %}
@@ -136,6 +257,6 @@
     {% endif %}
     {% if eig_cen_html %}
         {{ eig_cen_html[0]['script'] | safe }}
-    {% endif %}
+    {% endif %} -->
 </body>
 </html>

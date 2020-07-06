@@ -2,7 +2,7 @@ import json
 
 arr = []
 
-with open('hasil/captions3.json', encoding='utf-8') as f:
+with open('captions.json', encoding='utf-8') as f:
     arr = json.load(f)
 
 hashtag = []
@@ -11,6 +11,7 @@ for item in arr:
     shortcode = item['shortcode']
     caption = item['caption']
     hashtags = []
+    display = item['display']
     
     for tag in caption.split():
         if tag.startswith("#"):
@@ -29,10 +30,11 @@ for item in arr:
     # hashtags = [tag.strip("#") for tag in caption.split() if tag.startswith("#")]
     hashtag.append({
         'shortcode' : shortcode,
-        'hashtag' :  hashtags
+        'hashtag' :  hashtags,
+        'display' : display
     })
 
-with open('hasil/hashtags2.json', 'w', encoding='utf-8') as outfile: # encoding utf-8 utk izin simpan karakter selain latin
+with open('hashtags3.json', 'w', encoding='utf-8') as outfile: # encoding utf-8 utk izin simpan karakter selain latin
     json.dump(hashtag, outfile, ensure_ascii=False)
 
 print("Jumlah Captions:",len(arr))

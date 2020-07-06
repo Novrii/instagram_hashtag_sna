@@ -4,7 +4,7 @@ import json
 
 arr = []
 
-with open('posts.json', 'r') as f:
+with open('hasil/posts.json', 'r') as f:
     arr = json.loads(f.read()) # load json data from previous step
     
 # print(len(arr))
@@ -12,6 +12,7 @@ with open('posts.json', 'r') as f:
 captions = []
 for item in arr:
     shortcode = item['shortcode']
+    display = item['display_url']
 
     caption = item['edge_media_to_caption']['edges']
     # print(len(caption))
@@ -21,7 +22,8 @@ for item in arr:
             # print(text)
             captions.append({
                 'shortcode' : shortcode,
-                'caption' : text
+                'caption' : text,
+                'display' : display
             })
     except:
         print(len(caption))
