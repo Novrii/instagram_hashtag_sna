@@ -6,6 +6,7 @@ cycler==0.10.0
 decorator==4.4.2
 Flask==1.1.2
 idna==2.9
+instaloader==4.5.3
 itsdangerous==1.1.0
 Jinja2==2.11.2
 kiwisolver==1.2.0

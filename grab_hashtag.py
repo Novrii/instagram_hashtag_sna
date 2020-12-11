@@ -2,7 +2,7 @@ import json
 
 arr = []
 
-with open('captions.json', encoding='utf-8') as f:
+with open('data/coding_7_7_2020/captions.json', encoding='utf-8') as f:
     arr = json.load(f)
 
 hashtag = []
@@ -26,11 +26,11 @@ for item in arr:
                 save_tag = (tag.strip("#").encode('ascii', 'ignore')).decode('utf-8')
                 if len(save_tag) is not 0:
                     hashtags.append(save_tag)
-    
+    set(hashtags)
     # hashtags = [tag.strip("#") for tag in caption.split() if tag.startswith("#")]
     hashtag.append({
         'shortcode' : shortcode,
-        'hashtag' :  hashtags,
+        'hashtag' :  hashtags, 
         'display' : display
     })
 

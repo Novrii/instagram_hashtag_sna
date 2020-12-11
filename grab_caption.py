@@ -1,6 +1,6 @@
 import time
 import json
-
+import csv
 
 arr = []
 
@@ -30,4 +30,14 @@ for item in arr:
     
 with open('captions.json', 'w', encoding='utf-8') as outfile:
     json.dump(captions, outfile, ensure_ascii=False) # save to json
-    print("Saved")
+    print("Saved json file")
+
+with open('captions.csv', mode='w') as csv_file:
+    for x in captions:
+        # print(x['shortcode'])
+        kolom = ['shortcode', 'caption', 'display']
+        writer = csv.DictWriter(csv_file, fieldnames=kolom)
+
+        writer.writeheader()
+        writer.writerow({'shortcode': x['shortcode'], 'caption': (x['caption'].encode('ascii', 'ignore')).decode('utf-8'), 'display': x['display']})
+    print("saved csv file")
