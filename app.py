@@ -299,9 +299,10 @@ def cari():
                     G_symmetric.add_edge(edge['node1'], edge['node2'])
                     G_temp.add_edge(edge['node1'], edge['node2'])
 
-                for i in G_temp.degree():
-                    if i[1] < 100:
-                        G_symmetric.remove_node(i[0])
+                # remove node yg kurang dari 100 relasinya
+                # for i in G_temp.degree():
+                #     if i[1] < 100:
+                #         G_symmetric.remove_node(i[0])
                 
                 # set attr size and color
                 node_size = {k:v/5 for k, v in G_symmetric.degree()}

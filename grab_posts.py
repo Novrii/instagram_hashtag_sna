@@ -15,6 +15,8 @@ for i in range(0, page_count):
     http = urllib3.PoolManager()
     r = http.request('GET', url)
     data = json.loads(r.data)
+    print(r.status)
+    exit()
     
     
     end_cursor = data['graphql']['hashtag']['edge_hashtag_to_media']['page_info']['end_cursor'] # value for the next page
