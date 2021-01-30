@@ -110,6 +110,7 @@ def cari():
     
     if request.method == 'POST':
         riwayat = request.form['hashtag']
+        # page = request.form['page']
         # return jsonify(riwayat)
         # update = request.form['update']
         # jika request = hashtag, tampilkan data lama atau membuat data
@@ -143,24 +144,29 @@ def cari():
                 #         print(riwayat,"dihapus")
                 os.mkdir(dir_riwayat) # create dir riwayat
                 print(dir_riwayat)
+                # return redirect(url_for('cari')) # debug
+
                 # Grab Posts
                 arr = []
 
                 # debug
                 # return jsonify(dir_riwayat)
+                page = request.form['page']
+
                 
                 end_cursor = '' # penanda halaman
                 tag = riwayat # tag yg mau dicari
-                page_count = 1 # jumlah halaman (1 halaman kurang lebih 60 posts)
+                page_count = int(page) # jumlah halaman (1 halaman kurang lebih 60 posts)
 
                 try:
                     for i in range(0, page_count):
                         url = "https://www.instagram.com/explore/tags/{0}/?__a=1&max_id={1}".format(tag, end_cursor)
-                        # r = requests.get(url)
-                        # data = json.loads(r.text)
+                        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36"}
+                        r = requests.get(url, headers=headers)
+                        data = json.loads(r.text)
                         # HTTP = urllib3.PoolManager()
-                        r = HTTP.request('GET', url)
-                        data = json.loads(r.data)
+                        # r = HTTP.request('GET', url)
+                        # data = json.loads(r.data)
                         
                         end_cursor = data['graphql']['hashtag']['edge_hashtag_to_media']['page_info']['end_cursor'] # value for the next page
                         edges = data['graphql']['hashtag']['edge_hashtag_to_media']['edges'] # list with posts
@@ -218,11 +224,11 @@ def cari():
                                     # menghilangkan tag, emoji dan bahasa selain latin (HANYA BAHASA LATIN)
                                     save_tag = (tag_tag.strip("#").encode('ascii', 'ignore')).decode('utf-8')
                                     if len(save_tag) is not 0:
-                                        hashtags.append(save_tag.strip("_"))
+                                        hashtags.append(save_tag.strip("_").lower())
                             else:
                                 save_tag = (tag.strip("#").encode('ascii', 'ignore')).decode('utf-8')
                                 if len(save_tag) is not 0:
-                                    hashtags.append(save_tag.strip("_"))
+                                    hashtags.append(save_tag.strip("_").lower())
                     list(dict.fromkeys(hashtags)) # remove duplicate list hashtags
                     # hashtags = [tag.strip("#") for tag in caption.split() if tag.startswith("#")]
                     if len(hashtags) is not 0: # jika ada hashtags kosong, maka tidak disimpan
@@ -300,9 +306,9 @@ def cari():
                     G_temp.add_edge(edge['node1'], edge['node2'])
 
                 # remove node yg kurang dari 100 relasinya
-                # for i in G_temp.degree():
-                #     if i[1] < 100:
-                #         G_symmetric.remove_node(i[0])
+                for i in G_temp.degree():
+                    if i[1] < 100:
+                        G_symmetric.remove_node(i[0])
                 
                 # set attr size and color
                 node_size = {k:v/5 for k, v in G_symmetric.degree()}
@@ -713,15 +719,16 @@ def proses():
                 
                 end_cursor = '' # penanda halaman
                 tag = riwayat # tag yg mau dicari
-                page_count = 9 # jumlah halaman (1 halaman kurang lebih 60 posts)
+                page_count = 1 # jumlah halaman (1 halaman kurang lebih 60 posts)
 
                 try:
                     for i in range(0, page_count):
                         url = "https://www.instagram.com/explore/tags/{0}/?__a=1&max_id={1}".format(tag, end_cursor)
-                        r = HTTP.request('GET', url)
-                        data = json.loads(r.data)
-                        # r = requests.get(url)
-                        # data = json.loads(r.text)
+                        # r = HTTP.request('GET', url)
+                        # data = json.loads(r.data)
+                        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36"}
+                        r = requests.get(url, headers=headers)
+                        data = json.loads(r.text)
                         
                         end_cursor = data['graphql']['hashtag']['edge_hashtag_to_media']['page_info']['end_cursor'] # value for the next page
                         edges = data['graphql']['hashtag']['edge_hashtag_to_media']['edges'] # list with posts
@@ -778,11 +785,11 @@ def proses():
                                     # menghilangkan tag, emoji dan bahasa selain latin (HANYA BAHASA LATIN)
                                     save_tag = (tag_tag.strip("#").encode('ascii', 'ignore')).decode('utf-8')
                                     if len(save_tag) is not 0:
-                                        hashtags.append(save_tag)
+                                        hashtags.append(save_tag.strip("_").lower())
                             else:
                                 save_tag = (tag.strip("#").encode('ascii', 'ignore')).decode('utf-8')
                                 if len(save_tag) is not 0:
-                                    hashtags.append(save_tag)
+                                    hashtags.append(save_tag.strip("_").lower())
                     # set(hashtags)
                     list(dict.fromkeys(hashtags)) # remove duplicate list hashtags
                     # hashtags = [tag.strip("#") for tag in caption.split() if tag.startswith("#")]
@@ -1218,19 +1225,22 @@ def proses():
     # else:
     #     return jsonify("Get Back !")
 
-@app.route('/delete_riwayat/<riwayat>', methods=['POST', 'GET'])
-def delete_riwayat(riwayat):
-    # if request.method == 'POST':
-    # id_riwayat = request.form['del_tag']
+# Route Delete Hashtag Data
+@app.route('/delete_riwayat', methods=['POST'])
+def delete_riwayat():
+    if request.method == 'POST':
+        id_riwayat = request.form['del_tag']
 
-    # remove old folder
-    dir_data = os.path.join(BASEDIR, "data")
-    for x in os.listdir(dir_data):
-        if riwayat in x:
-            shutil.rmtree(os.path.join(dir_data, x))
-            print(riwayat,"dihapus")
-    return redirect(url_for('cari'))
+        # remove old folder
+        dir_data = os.path.join(BASEDIR, "data")
+        for x in os.listdir(dir_data):
+            if id_riwayat in x:
+                shutil.rmtree(os.path.join(dir_data, x))
+                print(id_riwayat, "dihapus")
+        return redirect(url_for('cari'))
+    else:
+        print("Getback!")
 
 # Run Server
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5000)

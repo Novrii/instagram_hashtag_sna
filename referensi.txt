@@ -4,3 +4,5 @@ https://stackoverflow.com/questions/35215842/render-html-strings-in-flask-templa
 https://stackoverflow.com/questions/40716718/show-more-on-click-on-table
 https://instaloader.github.io/module/structures.html#instaloader.Post
 https://stackoverflow.com/questions/10606133/sending-user-agent-using-requests-library-in-python (User Agent Requests)
+https://www.kite.com/python/answers/how-to-make-a-request-with-a-user-agent-in-python (User Agent Requests)
+https://stackoverflow.com/questions/64422691/copy-text-of-tag-to-clipboard-using-javascript

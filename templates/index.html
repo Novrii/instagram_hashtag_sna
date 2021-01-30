@@ -15,8 +15,15 @@
     </script>
 </head>
 <body>
-    
-    <a href="/logout" class="btn-standar" style="width: fit-content; position: fixed; right: 0;"> <i class="fa fa-sign-out"></i></a>
+    <form id="outForm" action="/logout" method="GET" >
+        <button 
+            type="submit"
+            class="btn-standar" style="width: fit-content; position: fixed; right: 0;"
+            onclick="logoutFunction()">LOG OUT &nbsp;<i class="fa fa-sign-out"></i>
+            
+        </button>
+        
+    </form>
     <div class="container">
 
 
@@ -32,9 +39,23 @@
                     <input
                         type="text"
                         name="hashtag"
-                        placeholder="Name of Hashtag"
+                        placeholder="Nama hashtag"
                         class="input"
+                        required
                     />
+                    <br>
+                    <h3>
+                        Jumlah Request
+                    </h3>
+                    <input
+                        type="text"
+                        name="page"
+                        placeholder="Jumlah request pencarian"
+                        class="input"
+                        onkeypress="return numberFilter(event)"
+                        required
+                    />
+                    <small>*banyak request = lama waktu menunggu</small>
                 </div>
                 <input type="submit" value="Cari" class="btn-standar" />
             </form>
@@ -54,13 +75,12 @@
                             </button>
                             
                     </form>
-                    <form id="delForm" action="/delete_riwayat/{{ x.split('_')[1] }}" method="GET" style="width: fit-content; display: inline-block; ">
+                    <form id="delForm{{x}}" action="/delete_riwayat" method="POST" style="width: fit-content; display: inline-block; ">
+                        <input type="hidden" name="del_tag" value="{{ x.split('_')[1] }}">
                         <button 
                             type="submit"
-                            name="del_tag"
-                            value="{{ x.split('_')[1] }}"
                             class="btn-riwayat" style="text-align: left; "
-                            onclick="archiveFunction()"><i class="fa fa-trash"></i>
+                            onclick="archiveFunction('{{x}}')"><i class="fa fa-trash"></i>
                             
                         </button>
                         
@@ -92,19 +112,20 @@
 
             <button class="tablink" onclick="openPage('Home', this, 'rgb(10, 128, 88)')" id="defaultOpen">Data Hashtag</button>
             <button class="tablink" onclick="openPage('News', this, 'rgb(10, 128, 88)')" >Centrality</button>
+            <button class="tablink" onclick="openPage('Rank', this, 'rgb(10, 128, 88)')" >Hashtag Terkait</button>
 
             <div id="Home" class="tabcontent">
                 <h3>Data Postingan</h3>
                 <table id="customers" class="more_load1">
                     <tr>
                         <th>No</th>
-                        <th>Hashtags</th>
+                        <th >Hashtags</th>
                         <th style="width: 150px;">Foto</th>
                     </tr>
                     {% for x in range(raw_data|length) %}
                         <tr>
                             <td style="text-align: center;">{{ x + 1 }}</td>
-                            <td>
+                            <td style="word-break: break-all;">
                                 {% for y in range(raw_data[x]['hashtag']|length) %}
                                     #{{ raw_data[x]['hashtag'][y] | safe }}
                                 {% endfor %}
@@ -123,9 +144,9 @@
             </div>
             
             <div id="News" class="tabcontent">
-                <h1 style="margin-top: 0;">
-                    Hasil
-                </h1>
+                
+                <h3>Hasil Centrality</h3>
+
 
                 <div style="margin: 0 auto; width: fit-content;">
                     {{ tag_html[0]['div'] | safe }}
@@ -133,19 +154,79 @@
 
                 <table id="customers" class="more_load">
                     <tr>
-                        <th style="text-align: center;">No</th>
-                        <th style="width: 175px;">Degree Centrality</th>
-                        <th style="width: 175px;">Closeness Centrality</th>
-                        <th style="width: 175px;">Betweenness Centrality</th>
-                        <th style="width: 175px;">Eigenvector Centrality</th>
+                        <th style="width: 175px;">Degree <br>Centrality</th>
+                        <th style="width: 175px;">Closeness <br>Centrality</th>
+                        <th style="width: 175px;">Betweenness <br>Centrality</th>
+                        <th style="width: 175px;">Eigenvector <br>Centrality</th>
+                    </tr>
+                    <tr>
+                        <td style="word-break: break-all;">
+                            
+                            <p id="deg_copy">
+                                {% for x in range(30) %}
+                                    #{{ deg_cen[x].split('<br>')[0] }}
+                                {% endfor %}
+                            </p>
+                            <button 
+                                class="btn-standar" style="width: fit-content;"
+                                onclick="degcopyFunction()">Copy &nbsp;<i class="fa fa-copy"></i>
+                                
+                            </button>
+                        </td>
+                        <td style="word-break: break-all;">
+                            <p id="clo_copy">
+                                {% for x in range(30) %}
+                                    #{{ clo_cen[x].split('<br>')[0] }}
+                                {% endfor %}
+                            </p>
+                            <button 
+                                class="btn-standar" style="width: fit-content;"
+                                onclick="clocopyFunction()">Copy &nbsp;<i class="fa fa-copy"></i>
+                                
+                            </button>
+                        </td>
+                        <td style="word-break: break-all;">
+                            <p id="bet_copy">
+                                {% for x in range(30) %}
+                                    #{{ bet_cen[x].split('<br>')[0] }}
+                                {% endfor %}
+                            </p>
+                            <button 
+                                class="btn-standar" style="width: fit-content;"
+                                onclick="betcopyFunction()">Copy &nbsp;<i class="fa fa-copy"></i>
+                                
+                            </button>
+                        </td>
+                        <td style="word-break: break-all;">
+                            <p id="eig_copy">
+                                {% for x in range(30) %}
+                                    #{{ eig_cen[x].split('<br>')[0] }}
+                                {% endfor %}
+                            </p>
+                            <button 
+                                class="btn-standar" style="width: fit-content;"
+                                onclick="eigcopyFunction()">Copy &nbsp;<i class="fa fa-copy"></i>
+                                
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+
+                <table id="customers" class="more_load">
+                    <tr>
+                        <th style="text-align: center;width: 50px;">Rank</th>
+                        <th style="width: 175px;">Degree <br>Centrality</th>
+                        <th style="width: 175px;">Closeness <br>Centrality</th>
+                        <th style="width: 175px;">Betweenness <br>Centrality</th>
+                        <th style="width: 175px;">Eigenvector <br>Centrality</th>
                     </tr>
                     {% for x in range(100) %}
                         <tr>
                             <td>{{ x + 1 }}</td>
-                            <td style="width: 175px;">{{ deg_cen[x] | safe }}</td>
-                            <td style="width: 175px;">{{ clo_cen[x] | safe }}</td>
-                            <td style="width: 175px;">{{ bet_cen[x] | safe }}</td>
-                            <td style="width: 175px;">{{ eig_cen[x] | safe }}</td>
+                            <td style="word-break: break-all;">{{ deg_cen[x] | safe }}</td>
+                            <td style="word-break: break-all;">{{ clo_cen[x] | safe }}</td>
+                            <td style="word-break: break-all;">{{ bet_cen[x] | safe }}</td>
+                            <td style="word-break: break-all;">{{ eig_cen[x] | safe }}</td>
                         </tr>
                     {% endfor %}
                 </table>
@@ -153,7 +234,44 @@
                 <a href="#" id="load_more" class="btn-standar" style="text-align: center;">Load more</a>
             </div>
 
-            
+            <div id="Rank" class="tabcontent">
+                <h1 style="margin-top: 0;">
+                    Hasil Hashtag Terkait
+                </h1>
+
+                <p style="text-align: justify; margin-bottom:15px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus repellat sequi, minus quasi omnis facere quo enim delectus officia ipsum nulla ad fugit aut corporis obcaecati neque mollitia, vitae repellendus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor consectetur laudantium eum unde eos. Suscipit ad natus temporibus blanditiis dolorum porro qui sequi necessitatibus illo dolores! Provident, ipsa soluta! Unde.</p>
+
+                <button class="tablinkr" onclick="openPager('Top', this, 'rgb(128, 10, 32)')" id="defaultOpenr"><i class="fa fa-trophy"></i> Top Hashtags</button>
+                <button class="tablinkr" onclick="openPager('Random', this, 'rgb(128, 10, 32)')" ><i class="fa fa-random"></i> Random Hashtags</button>
+                <button class="tablinkr" onclick="openPager('Live', this, 'rgb(128, 10, 32)')" ><i class="fa fa-cloud"></i> Live Hashtags</button>
+                <button class="tablinkr" onclick="openPager('Simillar', this, 'rgb(128, 10, 32)')" ><i class="fa fa-hashtag"></i> Simillar Hashtags</button>
+
+                <div id="Top" class="tabcontentr">
+                    <h3>Top Hashtags</h3>
+                    <p style="text-align: justify;margin-bottom:15px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus repellat sequi, minus quasi omnis facere quo enim delectus officia ipsum nulla ad fugit aut corporis obcaecati neque mollitia, vitae repellendus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor consectetur laudantium eum unde eos. Suscipit ad natus temporibus blanditiis dolorum porro qui sequi necessitatibus illo dolores! Provident, ipsa soluta! Unde.</p>
+
+                </div>
+
+                <div id="Random" class="tabcontentr">
+                    <h3>Random Hashtags</h3>
+                    <p style="text-align: justify;margin-bottom:15px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus repellat sequi, minus quasi omnis facere quo enim delectus officia ipsum nulla ad fugit aut corporis obcaecati neque mollitia, vitae repellendus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor consectetur laudantium eum unde eos. Suscipit ad natus temporibus blanditiis dolorum porro qui sequi necessitatibus illo dolores! Provident, ipsa soluta! Unde.</p>
+                    
+                </div>
+
+                <div id="Live" class="tabcontentr">
+                    <h3>Live Hashtags</h3>
+                    <p style="text-align: justify;margin-bottom:15px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus repellat sequi, minus quasi omnis facere quo enim delectus officia ipsum nulla ad fugit aut corporis obcaecati neque mollitia, vitae repellendus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor consectetur laudantium eum unde eos. Suscipit ad natus temporibus blanditiis dolorum porro qui sequi necessitatibus illo dolores! Provident, ipsa soluta! Unde.</p>
+
+                </div>
+
+                <div id="Simillar" class="tabcontentr">
+                    <h3>Simillar Hashtags</h3>
+                    <p style="text-align: justify;margin-bottom:15px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus repellat sequi, minus quasi omnis facere quo enim delectus officia ipsum nulla ad fugit aut corporis obcaecati neque mollitia, vitae repellendus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor consectetur laudantium eum unde eos. Suscipit ad natus temporibus blanditiis dolorum porro qui sequi necessitatibus illo dolores! Provident, ipsa soluta! Unde.</p>
+
+                </div>
+                
+
+            </div>
             
             
         {% endif %}
@@ -161,13 +279,13 @@
     </div>
 
     <script>
-        function archiveFunction() {
+        function archiveFunction(data) {
             event.preventDefault(); // prevent form submit
             // var form = event.target.form; // storing the form
 
             Swal.fire({
             title: 'Anda Yakin?',
-            text: "Hapus riwayat hashtag "+document.getElementsByName("del_tag")[0].value+"?",
+            text: "Hapus riwayat hashtag "+data.split('_')[1]+"?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -180,9 +298,108 @@
                 // 'Your file has been deleted.',
                 // 'success'
                 // )
-                document.getElementById("delForm").submit();
+                document.getElementById("delForm"+data).submit();
             }
             })
+        }
+        function logoutFunction() {
+            event.preventDefault(); // prevent form submit
+            // var form = event.target.form; // storing the form
+
+            Swal.fire({
+            title: 'Anda Yakin?',
+            text: "Logout Aplikasi ?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Logout!'
+            }).then((result) => {
+            if (result.value) {
+                // Swal.fire(
+                // 'Deleted!',
+                // 'Your file has been deleted.',
+                // 'success'
+                // )
+                document.getElementById("outForm").submit();
+            }
+            })
+        }
+        function numberFilter(evt) {
+            // angka 0 tidak diizinkan
+            let charCode = (evt.which) ? evt.which : event.keyCode
+                if ( charCode > 31 && (charCode < 49 || charCode > 57))
+                return false;
+            return true;
+        
+        }
+        function degcopyFunction() {
+            var copy = document.getElementById("deg_copy");
+            var copyText = document.createElement("textarea");
+            //adding p tag text to textarea 
+            copyText.value = copy.textContent;
+            document.body.appendChild(copyText);
+            copyText.select();
+            copyText.setSelectionRange(0, 99999)
+            document.execCommand("copy");
+            copyText.remove();
+            // alert("Hashtags berhasil dicopy: " + copyText.value);
+            Swal.fire(
+                'Tersalin!',
+                'Hashtags Degree Centrality berhasil disalin',
+                'success'
+            )
+        }
+        function clocopyFunction() {
+            var copy = document.getElementById("clo_copy");
+            var copyText = document.createElement("textarea");
+            //adding p tag text to textarea 
+            copyText.value = copy.textContent;
+            document.body.appendChild(copyText);
+            copyText.select();
+            copyText.setSelectionRange(0, 99999)
+            document.execCommand("copy");
+            copyText.remove();
+            // alert("Hashtags berhasil dicopy: " + copyText.value);
+            Swal.fire(
+                'Tersalin!',
+                'Hashtags Closeness Centrality berhasil disalin',
+                'success'
+            )
+        }
+        function betcopyFunction() {
+            var copy = document.getElementById("bet_copy");
+            var copyText = document.createElement("textarea");
+            //adding p tag text to textarea 
+            copyText.value = copy.textContent;
+            document.body.appendChild(copyText);
+            copyText.select();
+            copyText.setSelectionRange(0, 99999)
+            document.execCommand("copy");
+            copyText.remove();
+            // alert("Hashtags berhasil dicopy: " + copyText.value);
+            Swal.fire(
+                'Tersalin!',
+                'Hashtags Betweenness Centrality berhasil disalin',
+                'success'
+            )
+        }
+        function eigcopyFunction() {
+            var copy = document.getElementById("eig_copy");
+            var copyText = document.createElement("textarea");
+            //adding p tag text to textarea 
+            copyText.value = copy.textContent;
+            document.body.appendChild(copyText);
+            copyText.select();
+            copyText.setSelectionRange(0, 99999)
+            document.execCommand("copy");
+            copyText.remove();
+            // alert("Hashtags berhasil dicopy: " + copyText.value);
+            Swal.fire(
+                'Tersalin!',
+                'Hashtags Eigenvector Centrality berhasil disalin',
+                'success'
+            )
         }
     </script>
 
@@ -221,6 +438,25 @@
 
     // Get the element with id="defaultOpen" and click on it
     document.getElementById("defaultOpen").click();
+    </script>
+
+    <script>
+        function openPager(pageName,elmnt,color) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontentr");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinkr");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].style.backgroundColor = "";
+            }
+            document.getElementById(pageName).style.display = "block";
+            elmnt.style.backgroundColor = color;
+        }
+
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpenr").click();
     </script>
 
     {% if tag_html %}

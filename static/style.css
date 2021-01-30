@@ -12,7 +12,7 @@ body {
 }
 
 .container {
-	max-width: 800px;
+	max-width: 900px;
 	margin: 1rem auto;
 	overflow: auto;
 	padding: 0 2rem;
@@ -64,7 +64,7 @@ a {
     cursor: pointer;
     padding: 14px 16px;
     font-size: 17px;
-    width: 50% ;
+    width: 33.3% ;
 }
 
 .tablink:hover {
@@ -82,8 +82,38 @@ a {
 
 #Home {background-color: #fff;}
 #News {background-color: #fff;}
-#About {background-color: #fff;}
+#Rank {background-color: #fff;}
 
+
+/* Style tab links ranking */
+.tablinkr {
+    background-color: rgb(233, 38, 71);
+    color: white;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    font-size: 17px;
+    width: 25% ;
+}
+
+.tablinkr:hover {
+    background-color: rgb(255, 66, 98);
+}
+
+.tabcontentr {
+    color: #333;
+    display: none;
+    padding: 10px 10px;
+	height: 100%;
+	overflow: auto;
+}
+
+#Top {background-color: #fff;}
+#Random {background-color: #fff;}
+#Live {background-color: #fff;}
+#Simillar {background-color: #fff;}
 
 input[type='text'],
 input[type='password'],
